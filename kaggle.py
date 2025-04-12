@@ -3,6 +3,7 @@
 import kagglehub
 from kagglehub import KaggleDatasetAdapter
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Set the path to the file you'd like to load
 file_path = "brasileirao2.xlsx"
@@ -39,9 +40,26 @@ def save_to_csv():
   df.to_csv(output_file, index=False, encoding='utf-8')
   print(f"Dataset salvo com sucesso em: {output_file}")
 
+def goals_scored():
+  global libertadores
+  libertadores = formato_atual[formato_atual['Classificacao'] == 'Libertadores']
+  grouped_by_year = libertadores.groupby('year', as_index=True).agg({'goals_scored':'sum',
+                                                                     'goals_against':"sum"})
+  print(grouped_by_year.head())
+  #scored_goals = libertadores['goals_scored'].tolist()
+  #print(scored_goals)
+   
+
+  plt.plot(grouped_by_year.index,grouped_by_year['goals_scored'], marker = 'o')
+  plt.plot(grouped_by_year.index,grouped_by_year['goals_against'], marker = 'x')
+  plt.xlabel("Ano")
+  plt.ylabel("Gols marcados e sofridos pelos times classificados")
+  plt.show()
+
 
 load_data()
 selecionar_atual()
 classificar()
 save_to_csv()
-print("First 5 records:", formato_atual.head())
+#print("First 5 records:", formato_atual.head())
+goals_scored()
