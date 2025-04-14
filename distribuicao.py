@@ -10,4 +10,4 @@ def pizza_dist(formato_atual):
     print(valores)
     plt.pie(valores, labels=classificados.index, startangle=140, autopct='%1.1f%%')
     plt.axis('equal')  
-    plt.show()
+    plt.savefig('graficos/distribuicaodevagas.png')
