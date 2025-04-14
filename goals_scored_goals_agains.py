@@ -8,10 +8,7 @@ def goals_scored_goals_against(formato_atual):
   libertadores = formato_atual[formato_atual['Classificacao'] == 'Libertadores']
   grouped_by_year = libertadores.groupby('year', as_index=True).agg({'goals_scored':'sum',
                                                                      'goals_against':"sum"})
-  print(grouped_by_year.head())
-  #scored_goals = libertadores['goals_scored'].tolist()
-  #print(scored_goals)
-   
+
 
   plt.plot(grouped_by_year.index,grouped_by_year['goals_scored'], marker = 'o', label="Gols Marcados")
   plt.plot(grouped_by_year.index,grouped_by_year['goals_against'], marker = 'x', label="Gols Sofridos")
