@@ -12,5 +12,6 @@ def compare_saldos(formato_atual):
     plt.xlabel("Ano")
     plt.ylabel("Saldo")
     plt.legend(title="Classificação")  
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
     plt.savefig('graficos/saldosporano.png')
     plt.clf() 
