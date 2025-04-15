@@ -63,6 +63,14 @@ def goals_scored_goals_against(formato_atual):
   limbo = formato_atual[formato_atual['Classificacao'] == 'Limbo']
   grouped_by_year_limbo = limbo.groupby('year', as_index=True).agg({'goals_scored':'sum',
                                                                      'goals_against':"sum"})
+  plt.plot(grouped_by_year_limbo.index,grouped_by_year_limbo['goals_scored'], marker = 'o', label="Gols Marcados")
+  plt.plot(grouped_by_year_limbo.index,grouped_by_year_limbo['goals_against'], marker = 'x', label="Gols Sofridos")
+  plt.xlabel("Ano")
+  plt.ylabel("Gols marcados e sofridos pelos times que não se classificaram para nada")
+  plt.legend()
+  plt.grid(axis='y', linestyle='--', alpha=0.7)
+  plt.savefig('graficos/limbo .png')  
+  plt.clf() 
 
   gols_marcados = []
   total_sofridos = []
