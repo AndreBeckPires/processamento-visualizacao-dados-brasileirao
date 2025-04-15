@@ -5,9 +5,9 @@ def pizza_dist(formato_atual):
     classificados = formato_atual[formato_atual['year'] ==  2006]
 
     classificados = classificados['Classificacao'].value_counts()
-    print(classificados)
+    #print(classificados)
     valores = list(classificados.values)
-    print(valores)
+    #print(valores)
     plt.pie(valores, labels=classificados.index, startangle=140, autopct='%1.1f%%')
     plt.axis('equal')  
     plt.savefig('graficos/distribuicaodevagas.png')

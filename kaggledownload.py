@@ -21,7 +21,7 @@ def download_dataset():
     global df
     df = pd.read_excel(excel_file, engine='openpyxl')
 
-    print(df.head())
+    #print(df.head())
     return df
 
 def selecionar_atual(df):
@@ -30,7 +30,7 @@ def selecionar_atual(df):
   return formato_atual
 
 def classificar(formato_atual): 
-  print(df.shape)  
+  #print(df.shape)  
   bins = [0,4,6,12,16,20]
   labels = ["Libertadores","Pre-libertadores", "Sul-Americana", "Limbo","Rebaixamento"]
   formato_atual["Classificacao"] = pd.cut(formato_atual['position'], bins=bins, labels=labels, include_lowest=True)
@@ -49,7 +49,7 @@ def goals_scored_goals_against(formato_atual):
   libertadores = formato_atual[formato_atual['Classificacao'] == 'Libertadores']
   grouped_by_year = libertadores.groupby('year', as_index=True).agg({'goals_scored':'sum',
                                                                      'goals_against':"sum"})
-  print(grouped_by_year.head())
+  #print(grouped_by_year.head())
   #scored_goals = libertadores['goals_scored'].tolist()
   #print(scored_goals)
    

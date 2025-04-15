@@ -54,3 +54,8 @@ def goals_scored_goals_against(formato_atual):
   plt.savefig('graficos/rebaixados.png')  
   plt.clf() 
 
+  gols_marcados = []
+  total_gols_libertadores = 0
+  for year in grouped_by_year.index:
+    print('printando',grouped_by_year[grouped_by_year['year'] == 'year'])
+  #print(gols_marcados)
