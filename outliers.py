@@ -50,24 +50,18 @@ def check_outliers_liberadores_iqr(dataset):
 
 def normalizados_rebaixados(dataset):
     rebaixados = dataset[dataset['Classificacao'] == 'Rebaixamento'].copy()
-    rebaixados['Gols Marcados Normalizados'] = (rebaixados['goals_scored'] - rebaixados['goals_scored'].min()) / (rebaixados['goals_scored'].max() - rebaixados['goals_scored'].min())
-   # print("Top 5 normalizados 'Rebaixados' mais altos:")
-   #print(rebaixados.nlargest(5, 'Gols Marcados Normalizados'))
+    rebaixados['Gols Marcados Normalizados'] = ((rebaixados['goals_scored'] - rebaixados['goals_scored'].min()) / 
+                                                (rebaixados['goals_scored'].max() - rebaixados['goals_scored'].min()))
 
-   # print("\nTop 5 normalizados 'Rebaixados' mais baixos:")
-   # print(rebaixados.nsmallest(5, 'Gols Marcados Normalizados'))
     rebaixados = rebaixados.sort_values(by='Gols Marcados Normalizados', ascending=True)
 
     rebaixados.to_csv('csv/normalizados_rebaixados.csv', index=False)
 
 def normalizados_libertadores(dataset):
     libertadores = dataset[dataset['Classificacao'] == 'Libertadores'].copy()
-    libertadores['Gols Sofridos Normalizados'] = (libertadores['goals_against'] - libertadores['goals_against'].min()) / (libertadores['goals_against'].max() - libertadores['goals_against'].min())
-    #print("Top 5 normalizados 'Libertadores' mais altos:")
-   # print(libertadores.nlargest(5, 'Gols Sofridos Normalizados'))
+    libertadores['Gols Sofridos Normalizados'] = ((libertadores['goals_against'] - libertadores['goals_against'].min()) / 
+                                                  (libertadores['goals_against'].max() - libertadores['goals_against'].min()))
 
-   # print("\nTop 5 normalizados 'Libertadores' mais baixos:")
-   # print(libertadores.nsmallest(5, 'Gols Sofridos Normalizados'))
     libertadores = libertadores.sort_values(by='Gols Sofridos Normalizados', ascending=True)
     libertadores.to_csv('csv/normalizados_liberta.csv', index=False)
 
