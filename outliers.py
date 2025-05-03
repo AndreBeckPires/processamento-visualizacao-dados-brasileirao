@@ -1,53 +1,76 @@
 import pandas as pd
 import numpy as np
-from scipy.stats import zscore
+from scipy import stats
+import csv
 
 # puxa o dataset do keaggle 
-url = 'https://raw.githubusercontent.com/regazze/brasileirao-2003-2022/main/brasileirao-2003-2022.csv'
-df = pd.read_csv(url)
+# url = 'https://raw.githubusercontent.com/regazze/brasileirao-2003-2022/main/brasileirao-2003-2022.csv'
+# df = pd.read_csv(url)
+def check_outliers_libertadores(dataset):
+    liberta = dataset[dataset['Classificacao'] == 'Libertadores']
+    z_scores = stats.zscore(liberta['goals_against'])
+    z_limite = 3
+    outliers = np.abs(z_scores) > z_limite
+    outliers = liberta.iloc[outliers]
+    print("Outliers ZSCORE Libertadores:", outliers)
 
-# Converter datas
-df['data'] = pd.to_datetime(df['data'])
-df['ano'] = df['data'].dt.year
-df['mandante_gols'] = df['mandante placar']
-df['visitante_gols'] = df['visitante placar']
+def check_outliers_rebaixamento(dataset):
+    rebaixados = dataset[dataset['Classificacao'] == 'Rebaixamento']
+    z_scores = stats.zscore(rebaixados['goals_scored'])
+    z_limite = 3
+    outliers = np.abs(z_scores) > z_limite
 
-# Gols por time dentro de casa
-gols_mandante = df.groupby(['ano', 'mandante'])['mandante_gols'].sum().reset_index()
-gols_mandante.columns = ['ano', 'time', 'gols']
 
-# Gols por time fora de casa
-gols_visitante = df.groupby(['ano', 'visitante'])['visitante_gols'].sum().reset_index()
-gols_visitante.columns = ['ano', 'time', 'gols']
+    rebaixados_outliers = rebaixados.iloc[outliers]
+    print("Outliers ZSCORE Rebaixamentos:", rebaixados_outliers)
 
-# Total de gols da equipe
-gols_total = pd.concat([gols_mandante, gols_visitante])
-gols_total = gols_total.groupby(['ano', 'time'])['gols'].sum().reset_index()
 
-# ultimo jogo para definir a posição
-df['rodada'] = pd.to_numeric(df['rodada'], errors='coerce')
-ultimas_rodadas = df.groupby('ano')['rodada'].transform('max')
-tabela_final = df[df['rodada'] == ultimas_rodadas]
-posicoes_finais = tabela_final[['ano', 'mandante', 'colocacao']].drop_duplicates()
-posicoes_finais.columns = ['ano', 'time', 'colocacao']
+def check_outliers_rebaixados_iqr(dataset):
+    rebaixados = dataset[dataset['Classificacao'] == 'Rebaixamento']
+    q1 = rebaixados['goals_scored'].quantile(0.25)
+    q3 = rebaixados['goals_scored'].quantile(0.75)
+    iqr = q3 - q1
+    limite_inferior = q1 - 1.5 * iqr
+    limite_superior = q3 + 1.5 * iqr
+    outliers = rebaixados[(rebaixados['goals_scored'] < limite_inferior) | (rebaixados['goals_scored'] > limite_superior)]
+    print("Outliers Rebaixados (IQR):", outliers)
 
-# Juntar com os dados de gols
-dados = pd.merge(gols_total, posicoes_finais, on=['ano', 'time'], how='inner')
 
-# Separar campeões e rebaixados
-campeoes = dados[dados['colocacao'] == 1].copy()
-rebaixados = dados[dados['colocacao'] >= 17].copy()  # Rebaixados podem ser de 17º a 20º
+def check_outliers_liberadores_iqr(dataset):
+    libertadores = dataset[dataset['Classificacao'] == 'Libertadores']
+    q1 = libertadores['goals_against'].quantile(0.25)
+    q3 = libertadores['goals_against'].quantile(0.75)
+    iqr = q3 - q1
+    limite_inferior = q1 - 1.5 * iqr
+    limite_superior = q3 + 1.5 * iqr
+    outliers = libertadores[(libertadores['goals_against'] < limite_inferior) | (libertadores['goals_against'] > limite_superior)]
+    print("Outliers Libertadores (IQR):", outliers)
+    outliers.to_csv('iqrlibertadores.csv', index=False)
 
-# Juntar em um único dataframe
-todos = pd.concat([campeoes.assign(tipo='campeao'), rebaixados.assign(tipo='rebaixado')])
 
-# Calcular Z-score por ano
-todos['zscore_gols'] = todos.groupby('ano')['gols'].transform(lambda x: zscore(x, nan_policy='omit'))
 
-# Detectar outliers
-outliers = todos[np.abs(todos['zscore_gols']) > 2]
+def normalizados_rebaixados(dataset):
+    rebaixados = dataset[dataset['Classificacao'] == 'Rebaixamento']
+    rebaixados['Gols Marcados Normalizados'] = (rebaixados['goals_scored'] - rebaixados['goals_scored'].min()) / (rebaixados['goals_scored'].max() - rebaixados['goals_scored'].min())
+    print("Top 5 normalizados 'Rebaixados' mais altos:")
+    print(rebaixados.nlargest(5, 'Gols Marcados Normalizados'))
 
-# Exibir os outliers
-print("Outliers entre campeões e rebaixados com base nos gols:")
-print(outliers[['ano', 'time', 'tipo', 'gols', 'zscore_gols']])
+    print("\nTop 5 normalizados 'Rebaixados' mais baixos:")
+    print(rebaixados.nsmallest(5, 'Gols Marcados Normalizados'))
+    rebaixados = rebaixados.sort_values(by='Gols Marcados Normalizados', ascending=True)
+
+    rebaixados.to_csv('normalizados_rebaixados.csv', index=False)
+
+def normalizados_libertadores(dataset):
+    libertadores = dataset[dataset['Classificacao'] == 'Libertadores']
+    libertadores['Gols Sofridos Normalizados'] = (libertadores['goals_against'] - libertadores['goals_against'].min()) / (libertadores['goals_against'].max() - libertadores['goals_against'].min())
+    print("Top 5 normalizados 'Libertadores' mais altos:")
+    print(libertadores.nlargest(5, 'Gols Sofridos Normalizados'))
+
+    print("\nTop 5 normalizados 'Libertadores' mais baixos:")
+    print(libertadores.nsmallest(5, 'Gols Sofridos Normalizados'))
+    libertadores = libertadores.sort_values(by='Gols Sofridos Normalizados', ascending=True)
+    libertadores.to_csv('normalizados_liberta.csv', index=False)
+
+
 
