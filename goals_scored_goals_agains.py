@@ -3,15 +3,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import openpyxl
 
-def goals_scored_goals_against(formato_atual):
+def goals_scored_goals_taken(formato_atual):
   global libertadores
   libertadores = formato_atual[formato_atual['Classificacao'] == 'Libertadores']
-  grouped_by_year = libertadores.groupby('year', as_index=True).agg({'goals_scored':'sum',
-                                                                     'goals_against':"sum"})
+  grouped_by_year = libertadores.groupby('season', as_index=True).agg({'goals':'sum',
+                                                                     'goals_taken':"sum"})
 
 
-  plt.plot(grouped_by_year.index,grouped_by_year['goals_scored'], marker = 'o', label="Gols Marcados")
-  plt.plot(grouped_by_year.index,grouped_by_year['goals_against'], marker = 'x', label="Gols Sofridos")
+  plt.plot(grouped_by_year.index,grouped_by_year['goals'], marker = 'o', label="Gols Marcados")
+  plt.plot(grouped_by_year.index,grouped_by_year['goals_taken'], marker = 'x', label="Gols Sofridos")
   plt.xlabel("Ano")
   plt.ylabel("Gols marcados e sofridos pelos times classificados para Libertadores")
   plt.legend()
@@ -21,10 +21,10 @@ def goals_scored_goals_against(formato_atual):
 
   global pre_libertadores
   pre_libertadores = formato_atual[formato_atual['Classificacao'] == 'Pre-libertadores']
-  grouped_by_year_pre = pre_libertadores.groupby('year', as_index=True).agg({'goals_scored':'sum',
-                                                                     'goals_against':"sum"})
-  plt.plot(grouped_by_year_pre.index,grouped_by_year_pre['goals_scored'], marker = 'o', label="Gols Marcados")
-  plt.plot(grouped_by_year_pre.index,grouped_by_year_pre['goals_against'], marker = 'x', label="Gols Sofridos")
+  grouped_by_year_pre = pre_libertadores.groupby('season', as_index=True).agg({'goals':'sum',
+                                                                     'goals_taken':"sum"})
+  plt.plot(grouped_by_year_pre.index,grouped_by_year_pre['goals'], marker = 'o', label="Gols Marcados")
+  plt.plot(grouped_by_year_pre.index,grouped_by_year_pre['goals_taken'], marker = 'x', label="Gols Sofridos")
   plt.xlabel("Ano")
   plt.ylabel("Gols marcados e sofridos pelos times classificados Pre-Libertadores")
   plt.legend()
@@ -34,10 +34,10 @@ def goals_scored_goals_against(formato_atual):
 
   global sul_americana
   sul_americana = formato_atual[formato_atual['Classificacao'] == 'Sul-Americana']
-  grouped_by_year_sula = sul_americana.groupby('year', as_index=True).agg({'goals_scored':'sum',
-                                                                     'goals_against':"sum"})
-  plt.plot(grouped_by_year_sula.index,grouped_by_year_sula['goals_scored'], marker = 'o', label="Gols Marcados")
-  plt.plot(grouped_by_year_sula.index,grouped_by_year_sula['goals_against'], marker = 'x', label="Gols Sofridos")
+  grouped_by_year_sula = sul_americana.groupby('season', as_index=True).agg({'goals':'sum',
+                                                                     'goals_taken':"sum"})
+  plt.plot(grouped_by_year_sula.index,grouped_by_year_sula['goals'], marker = 'o', label="Gols Marcados")
+  plt.plot(grouped_by_year_sula.index,grouped_by_year_sula['goals_taken'], marker = 'x', label="Gols Sofridos")
   plt.xlabel("Ano")
   plt.ylabel("Gols marcados e sofridos pelos times classificados Sul-Americana")
   plt.legend()
@@ -47,10 +47,10 @@ def goals_scored_goals_against(formato_atual):
 
   global rebaixamento
   rebaixamento = formato_atual[formato_atual['Classificacao'] == 'Rebaixamento']
-  grouped_by_year_rebaixamento = rebaixamento.groupby('year', as_index=True).agg({'goals_scored':'sum',
-                                                                     'goals_against':"sum"})
-  plt.plot(grouped_by_year_rebaixamento.index,grouped_by_year_rebaixamento['goals_scored'], marker = 'o', label="Gols Marcados")
-  plt.plot(grouped_by_year_rebaixamento.index,grouped_by_year_rebaixamento['goals_against'], marker = 'x', label="Gols Sofridos")
+  grouped_by_year_rebaixamento = rebaixamento.groupby('season', as_index=True).agg({'goals':'sum',
+                                                                     'goals_taken':"sum"})
+  plt.plot(grouped_by_year_rebaixamento.index,grouped_by_year_rebaixamento['goals'], marker = 'o', label="Gols Marcados")
+  plt.plot(grouped_by_year_rebaixamento.index,grouped_by_year_rebaixamento['goals_taken'], marker = 'x', label="Gols Sofridos")
   plt.xlabel("Ano")
   plt.ylabel("Gols marcados e sofridos pelos times rebaixados")
   plt.legend()
@@ -61,10 +61,10 @@ def goals_scored_goals_against(formato_atual):
 
   global limbo
   limbo = formato_atual[formato_atual['Classificacao'] == 'Limbo']
-  grouped_by_year_limbo = limbo.groupby('year', as_index=True).agg({'goals_scored':'sum',
-                                                                     'goals_against':"sum"})
-  plt.plot(grouped_by_year_limbo.index,grouped_by_year_limbo['goals_scored'], marker = 'o', label="Gols Marcados")
-  plt.plot(grouped_by_year_limbo.index,grouped_by_year_limbo['goals_against'], marker = 'x', label="Gols Sofridos")
+  grouped_by_year_limbo = limbo.groupby('season', as_index=True).agg({'goals':'sum',
+                                                                     'goals_taken':"sum"})
+  plt.plot(grouped_by_year_limbo.index,grouped_by_year_limbo['goals'], marker = 'o', label="Gols Marcados")
+  plt.plot(grouped_by_year_limbo.index,grouped_by_year_limbo['goals_taken'], marker = 'x', label="Gols Sofridos")
   plt.xlabel("Ano")
   plt.ylabel("Gols marcados e sofridos pelos times que não se classificaram para nada")
   plt.legend()
@@ -73,7 +73,7 @@ def goals_scored_goals_against(formato_atual):
   plt.clf() 
 
   # gols_marcados = []
-  # total_sofridos = []
+  # total_sofridos = []f
   # total_gols_libertadores = 0
   # total_gols_pre = 0
   # total_gols_sula = 0
@@ -88,38 +88,38 @@ def goals_scored_goals_against(formato_atual):
  
   # for year in grouped_by_year.index:   
   #   temp = grouped_by_year[grouped_by_year.index == year]
-  #   goals = int(temp['goals_scored'].tolist()[0])
-  #   goals_sofridos = int(temp['goals_against'].tolist()[0])
+  #   goals = int(temp['goals'].tolist()[0])
+  #   goals_sofridos = int(temp['goals_taken'].tolist()[0])
   #   total_gols_libertadores += goals
   #   total_gols_sofridos_libertadores += goals_sofridos
 
 
   # for year in grouped_by_year_pre.index:   
   #   temp = grouped_by_year_pre[grouped_by_year_pre.index == year]
-  #   goals = int(temp['goals_scored'].tolist()[0])
-  #   goals_sofridos = int(temp['goals_against'].tolist()[0])
+  #   goals = int(temp['goals'].tolist()[0])
+  #   goals_sofridos = int(temp['goals_taken'].tolist()[0])
   #   total_gols_pre += goals
   #   total_gols_sofridos_pre += goals_sofridos
 
   # for year in grouped_by_year_sula.index:   
   #   temp = grouped_by_year_sula[grouped_by_year_sula.index == year]
-  #   goals = int(temp['goals_scored'].tolist()[0])
-  #   goals_sofridos = int(temp['goals_against'].tolist()[0])
+  #   goals = int(temp['goals'].tolist()[0])
+  #   goals_sofridos = int(temp['goals_taken'].tolist()[0])
   #   total_gols_sula += goals
   #   total_gols_sofridos_sula += goals_sofridos
 
   # for year in grouped_by_year_rebaixamento.index:   
   #   temp = grouped_by_year_rebaixamento[grouped_by_year_rebaixamento.index == year]
-  #   goals = int(temp['goals_scored'].tolist()[0])
-  #   goals_sofridos = int(temp['goals_against'].tolist()[0])
+  #   goals = int(temp['goals'].tolist()[0])
+  #   goals_sofridos = int(temp['goals_taken'].tolist()[0])
   #   total_gols_rebaixamento += goals
   #   total_gols_sofridos_rebaixamento += goals_sofridos
 
   
   # for year in grouped_by_year_limbo.index:   
   #   temp = grouped_by_year_limbo[grouped_by_year_limbo.index == year]
-  #   goals = int(temp['goals_scored'].tolist()[0])
-  #   goals_sofridos = int(temp['goals_against'].tolist()[0])    
+  #   goals = int(temp['goals'].tolist()[0])
+  #   goals_sofridos = int(temp['goals_taken'].tolist()[0])    
   #   total_gols_limbo += goals
   #   total_gols_sofridos_limbo += goals_sofridos
 
@@ -213,18 +213,18 @@ def goals_scored_goals_against(formato_atual):
   # plt.savefig('graficos/mediagolssofridos.png')
   # plt.clf()
 
-  medias = formato_atual.groupby('Classificacao')[['goals_scored','goals_against']].agg('mean')
+  medias = formato_atual.groupby('Classificacao')[['goals','goals_taken']].agg('mean')
 
   plt.figure(figsize=(20, 10))
 
-  plt.bar(medias.index, medias['goals_scored'])
+  plt.bar(medias.index, medias['goals'])
   plt.title("Media de gols marcados")
   plt.grid(axis='y', linestyle='--', alpha=0.7)
   plt.savefig('graficos/mediagolsmarcadosNOVO.png')
 
   plt.clf()
 
-  plt.bar(medias.index, medias['goals_against'])
+  plt.bar(medias.index, medias['goals_taken'])
   plt.title("Media de gols sofridos")
   plt.grid(axis='y', linestyle='--', alpha=0.7)
   plt.savefig('graficos/mediagolsofridosNOVO.png')
